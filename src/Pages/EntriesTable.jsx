@@ -19,8 +19,9 @@ function EntriesTable() {
     clearFilters,
     uniqueAccounts,
     filtered,
-    totalAmount,
+    totalAmount, 
   } = useEntriesFilter(state.entries);
+
   const DirhamIcon = ({ size = 16 }) => (
     <svg
       width={size}
@@ -37,6 +38,7 @@ function EntriesTable() {
       <line x1="3" y1="14" x2="14" y2="14" />
     </svg>
   );
+
   return (
     <div
       style={{
@@ -178,11 +180,9 @@ function EntriesTable() {
       )}
 
       {state.showEntries && filtered.length > 0 && (
-        <div
-          style={{ overflowX: "auto", borderRadius: 12, overflow: "hidden" }}
-        >
+        <div style={{ overflowX: "auto", borderRadius: 12 }}>
           <table
-            style={{ width: "100%", borderCollapse: "collapse", minWidth: 680 }}
+            style={{ width: "100%", borderCollapse: "collapse", minWidth: 780 }}
           >
             <thead>
               <tr
@@ -194,29 +194,19 @@ function EntriesTable() {
                 }}
               >
                 {[
-                  { key: "#", label: "#", align: "left", width: 48 },
-                  { key: "id", label: "Entry ID", align: "left", width: null },
-                  { key: "date", label: "Date", align: "left", width: null },
-                  { key: "acc", label: "Account", align: "left", width: null },
-                  {
-                    key: "amount",
-                    label: "Amount",
-                    align: "right",
-                    width: null,
-                  },
-                  { key: "memo", label: "Memo", align: "left", width: null },
-                  {
-                    key: "status",
-                    label: "Status",
-                    align: "left",
-                    width: null,
-                  },
-                ].map(({ key, label, align, width }, index, arr) => (
+                  { key: "#",             label: "#",              align: "left",  width: 48,   sortable: false },
+                  { key: "id",            label: "Entry ID",       align: "left",  width: null, sortable: true  },
+                  { key: "date",          label: "Date",           align: "left",  width: null, sortable: true  },
+                  { key: "accountDebit",  label: "Debit Account",  align: "left",  width: null, sortable: true  },
+                  { key: "accountCredit", label: "Credit Account", align: "left",  width: null, sortable: true  },
+                  { key: "debitAmount",   label: "Debit Amt",      align: "right", width: null, sortable: true  },
+                  { key: "creditAmount",  label: "Credit Amt",     align: "right", width: null, sortable: true  },
+                  { key: "memo",          label: "Memo",           align: "left",  width: null, sortable: false },
+                  { key: "status",        label: "Status",         align: "left",  width: null, sortable: false },
+                ].map(({ key, label, align, width, sortable }, index, arr) => (
                   <th
                     key={key}
-                    onClick={() =>
-                      ["id", "date", "amount"].includes(key) && handleSort(key)
-                    }
+                    onClick={() => sortable && handleSort(key)}
                     style={{
                       padding: "10px 16px",
                       textAlign: align,
@@ -225,9 +215,7 @@ function EntriesTable() {
                       color: "#9ca3af",
                       letterSpacing: "0.06em",
                       textTransform: "uppercase",
-                      cursor: ["id", "date", "amount"].includes(key)
-                        ? "pointer"
-                        : "default",
+                      cursor: sortable ? "pointer" : "default",
                       userSelect: "none",
                       whiteSpace: "nowrap",
                       width: width || "auto",
@@ -240,14 +228,16 @@ function EntriesTable() {
                     }}
                   >
                     {label}
-                    {arrow(key)}
+                    {sortable && arrow(key)}
                   </th>
                 ))}
               </tr>
             </thead>
+
             <tbody>
               {filtered.map((entry, i) => {
-                const debit = entry.lines.find((l) => l.type === "debit");
+                const debit  = entry.lines?.find((l) => l.type === "debit");
+                const credit = entry.lines?.find((l) => l.type === "credit");
                 return (
                   <tr
                     key={entry.journalEntryId || entry.id}
@@ -262,6 +252,7 @@ function EntriesTable() {
                       (e.currentTarget.style.background = "#fff")
                     }
                   >
+                    {/* # */}
                     <td
                       style={{
                         padding: "12px 16px",
@@ -273,6 +264,8 @@ function EntriesTable() {
                     >
                       {i + 1}
                     </td>
+
+                    {/* Entry ID */}
                     <td
                       style={{
                         padding: "12px 16px",
@@ -284,6 +277,8 @@ function EntriesTable() {
                     >
                       {entry.journalEntryId || entry.id || ""}
                     </td>
+
+                    {/* Date */}
                     <td
                       style={{
                         padding: "12px 16px",
@@ -294,9 +289,18 @@ function EntriesTable() {
                     >
                       {entry.date}
                     </td>
+
+                    {/* Debit Account */}
                     <td style={{ padding: "12px 16px" }}>
                       <AccountBadge account={debit?.account} />
                     </td>
+
+                    {/* Credit Account */}
+                    <td style={{ padding: "12px 16px" }}>
+                      <AccountBadge account={credit?.account} />
+                    </td>
+
+                    {/* Debit Amount */}
                     <td
                       style={{
                         padding: "12px 16px",
@@ -318,6 +322,31 @@ function EntriesTable() {
                         {Number(debit?.amount || 0).toLocaleString("en-US")}
                       </span>
                     </td>
+
+                    {/* Credit Amount */}
+                    <td
+                      style={{
+                        padding: "12px 16px",
+                        textAlign: "right",
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#111827",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <DirhamIcon size={14} />
+                        {Number(credit?.amount || 0).toLocaleString("en-US")}
+                      </span>
+                    </td>
+
+                    {/* Memo */}
                     <td
                       style={{
                         padding: "12px 16px",
@@ -332,6 +361,8 @@ function EntriesTable() {
                     >
                       {entry.memo || "—"}
                     </td>
+
+                    {/* Status */}
                     <td style={{ padding: "12px 16px" }}>
                       <span
                         style={{
@@ -350,7 +381,6 @@ function EntriesTable() {
                 );
               })}
             </tbody>
-
             <tfoot>
               <tr
                 style={{
@@ -359,7 +389,7 @@ function EntriesTable() {
                 }}
               >
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   style={{
                     padding: "12px 16px",
                     fontSize: 12,
@@ -380,8 +410,45 @@ function EntriesTable() {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  ₨ {Math.round(totalAmount).toLocaleString("en-PK")}
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <DirhamIcon size={14} />
+                    {Math.round(totalAmount).toLocaleString("en-US")}
+                  </span>
                 </td>
+                <td
+                  style={{
+                    padding: "12px 16px",
+                    textAlign: "right",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: "#111827",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <DirhamIcon size={14} />
+                    {Math.round(
+                      filtered.reduce((sum, e) => {
+                        const c = e.lines?.find((l) => l.type === "credit");
+                        return sum + Number(c?.amount || 0);
+                      }, 0)
+                    ).toLocaleString("en-US")}
+                  </span>
+                </td>
+
+                {/* Memo + Status — empty */}
                 <td colSpan={2} />
               </tr>
             </tfoot>
