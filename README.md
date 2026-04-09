@@ -39,4 +39,4 @@ App will open on: `http://localhost:5173`
 
 ## Related
 
-- Backend Repo: [netsuite-journal-simulator-backend](https://github.com/username/netsuite-journal-simulator-backend)
+- Backend Repo: [netsuite-journal-simulator-backend](https://github.com/Arif596/Netsuite-Journal-Simulator_Bakend)
