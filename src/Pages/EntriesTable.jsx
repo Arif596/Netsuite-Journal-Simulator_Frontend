@@ -21,7 +21,22 @@ function EntriesTable() {
     filtered,
     totalAmount,
   } = useEntriesFilter(state.entries);
-
+  const DirhamIcon = ({ size = 16 }) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M5 4h6a7 7 0 0 1 0 14H5z" />
+      <line x1="3" y1="10" x2="14" y2="10" />
+      <line x1="3" y1="14" x2="14" y2="14" />
+    </svg>
+  );
   return (
     <div
       style={{
@@ -196,7 +211,7 @@ function EntriesTable() {
                     align: "left",
                     width: null,
                   },
-                ].map(({ key, label, align, width },index,arr) => (
+                ].map(({ key, label, align, width }, index, arr) => (
                   <th
                     key={key}
                     onClick={() =>
@@ -292,7 +307,16 @@ function EntriesTable() {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      ₨ {Number(debit?.amount || 0).toLocaleString("en-PK")}
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <DirhamIcon size={14} />
+                        {Number(debit?.amount || 0).toLocaleString("en-US")}
+                      </span>
                     </td>
                     <td
                       style={{
