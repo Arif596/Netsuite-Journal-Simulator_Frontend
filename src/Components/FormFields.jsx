@@ -25,7 +25,7 @@ export function DateAmountRow({ form, set, errors }) {
         {errors?.date && <p style={errorTextStyle}>⚠ {errors.date}</p>}
       </div>
       <div>
-        <label style={labelStyle}>Amount (PKR)</label>
+        <label style={labelStyle}>Amount (AED)</label>
         <input
           type="text"
           inputMode="decimal"
