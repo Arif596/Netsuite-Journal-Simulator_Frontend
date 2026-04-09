@@ -1,0 +1,16 @@
+#,Date,Memo,Account (Debit),Debit,Account (Credit),Credit,Status
+1,2026-04-08,"Utilities Expensse ",Utilities,30000.00,Bank Account,30000.00,POSTED
+2,2026-04-08,"Travel Expense ",Travel Expense,34500.00,Bank Account,34500.00,POSTED
+3,2026-04-08,"Utilities ABC",Utilities,2000.00,Bank Account,2000.00,POSTED
+4,2026-04-08,"Office Supplier",Office Supplies,900.00,Bank Account,900.00,POSTED
+5,2026-04-08,"abcdc",Travel Expense,89999.99,Bank Account,89999.99,POSTED
+6,2026-04-08,"Travel Expense ",Travel Expense,20000.00,Bank Account,20000.00,POSTED
+7,2026-04-08,"Utilities Expense ",Utilities,10000.00,Bank Account,10000.00,POSTED
+8,2026-04-08,"Marketing Expense ",Marketing,50000.00,Bank Account,50000.00,POSTED
+9,2026-04-07,"Monthly sales revenue entry",Revenue,10000.00,Bank Account,10000.00,POSTED
+10,2026-04-07,"Monthly sales revenue entry",Sales Revenue,5000.00,Bank Account,5000.00,POSTED
+11,2026-04-04,"New laptop purchased for developer",Equipment,15000.00,Bank Account,15000.00,POSTED
+12,2026-04-03,"Electricity bill April",Utilities Expense,750.00,Bank Account,750.00,POSTED
+13,2026-04-03,"April office rent payment",Rent Expense,3000.00,Bank Account,3000.00,POSTED
+14,2026-04-02,"Client payment received",Accounts Receivable,8500.00,Bank Account,8500.00,POSTED
+15,2026-04-02,"Stationery purchase for office",Office Supplies,1200.00,Bank Account,1200.00,POSTED
