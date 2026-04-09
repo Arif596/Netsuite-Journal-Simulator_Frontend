@@ -9,6 +9,7 @@ const initialState = {
   showEntries: false,
 };
 const BASE_URL = "https://netsuite-journal-simulator-bakend.onrender.com";
+const API_URL = "http://localhost:3000";
 function journalReducer(state, action) {
   switch (action.type) {
     case "SET_SUBMITTING":
@@ -43,7 +44,7 @@ export function JournalProvider({ children }) {
   const submitEntry = async (formData) => {
     dispatch({ type: "SET_SUBMITTING", payload: true });
     try {
-      const res = await fetch(`${BASE_URL}/api/journal-entry`, {
+      const res = await fetch(`${API_URL}/api/journal-entry`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -71,7 +72,7 @@ export function JournalProvider({ children }) {
     }
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const res = await fetch(`${BASE_URL}/api/journal-entries`);
+      const res = await fetch(`${API_URL}/api/journal-entries`);
       const data = await res.json();
        console.log("getEntries",res)
       if (data.success) {
@@ -88,7 +89,7 @@ export function JournalProvider({ children }) {
 const fetchAllEntries = async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const res = await fetch(`${BASE_URL}/api/journal-entries/all`);
+      const res = await fetch(`${API_URL}/api/journal-entries/all`);
       const data = await res.json();
 
       if (data.success) {

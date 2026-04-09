@@ -26,7 +26,25 @@ function AllEntriesTable({
       </span>
     );
   };
+  const DirhamIcon = ({ size = 16 }) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {/* D shape */}
+      <path d="M5 4h6a7 7 0 0 1 0 14H5z" />
 
+      {/* horizontal lines */}
+      <line x1="3" y1="10" x2="14" y2="10" />
+      <line x1="3" y1="14" x2="14" y2="14" />
+    </svg>
+  );
   const sortableColumns = [
     { key: "#", sortable: false },
     { key: "Date", sortable: true, sortId: "date" },
@@ -51,8 +69,16 @@ function AllEntriesTable({
     letterSpacing: "0.07em",
     transition: "all 0.15s",
   });
-const getEntryId = (entry, index) =>
-  entry.id || entry.journalEntryId || `${entry.date}-${index}`;
+  const formatAED = (amount) => {
+    if (amount === null || amount === undefined) return "—";
+
+    return `AED ${Number(amount).toLocaleString("en-AE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+  const getEntryId = (entry, index) =>
+    entry.id || entry.journalEntryId || `${entry.date}-${index}`;
   return (
     <div>
       <div
@@ -66,7 +92,12 @@ const getEntryId = (entry, index) =>
         }}
       >
         <div
-          style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}
+          style={{
+            display: "flex",
+            gap: 10,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
         >
           <div style={{ position: "relative" }}>
             <span
@@ -166,16 +197,18 @@ const getEntryId = (entry, index) =>
                   {sortable && <SortIcon col={sortId} />}
                 </th>
               ))}
-             </tr>
+            </tr>
           </thead>
           <tbody>
             {paginated.length > 0 ? (
               paginated.map((entry, i) => {
                 const debitLine = entry.lines?.find((l) => l.type === "debit");
-                const creditLine = entry.lines?.find((l) => l.type === "credit");
+                const creditLine = entry.lines?.find(
+                  (l) => l.type === "credit",
+                );
                 const globalIndex = (page - 1) * PAGE_SIZE + i;
                 const entryStatus = entry.status || "DRAFT"; // Fixed: fallback for status
-                
+
                 return (
                   <tr
                     key={getEntryId(entry)} // Fixed: using helper function
@@ -185,10 +218,22 @@ const getEntryId = (entry, index) =>
                       transition: "background 0.15s",
                     }}
                   >
-                    <td style={{ padding: "13px 18px", fontSize: 11, color: "#9aa0b4" }}>
+                    <td
+                      style={{
+                        padding: "13px 18px",
+                        fontSize: 11,
+                        color: "#9aa0b4",
+                      }}
+                    >
                       {globalIndex + 1}
                     </td>
-                    <td style={{ padding: "13px 18px", fontSize: 11, color: "#1e2d6b" }}>
+                    <td
+                      style={{
+                        padding: "13px 18px",
+                        fontSize: 11,
+                        color: "#1e2d6b",
+                      }}
+                    >
                       {entry.date || "—"}
                     </td>
                     <td
@@ -219,7 +264,18 @@ const getEntryId = (entry, index) =>
                         fontWeight: 700,
                       }}
                     >
-                      {debitLine ? `₨ ${Number(debitLine.amount).toLocaleString("en-PK")}` : "—"}
+                      
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
+                          }}
+                        >
+                          <DirhamIcon size={14} />
+                          {(debitLine?.amount)}
+                        </div>
+                     
                     </td>
                     <td
                       style={{
@@ -229,7 +285,18 @@ const getEntryId = (entry, index) =>
                         fontWeight: 700,
                       }}
                     >
-                      {creditLine ? `₨${Number(creditLine.amount).toLocaleString("en-PK")}` : "—"}
+                      
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
+                          }}
+                        >
+                          <DirhamIcon size={14} />
+                          {(creditLine?.amount)}
+                        </div>
+                      
                     </td>
                     <td style={{ padding: "13px 18px" }}>
                       <span
@@ -321,7 +388,7 @@ const getEntryId = (entry, index) =>
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter(
                     (p) =>
-                      p === 1 || p === totalPages || Math.abs(p - page) <= 1
+                      p === 1 || p === totalPages || Math.abs(p - page) <= 1,
                   )
                   .reduce((acc, p, idx, arr) => {
                     if (idx > 0 && p - arr[idx - 1] > 1) acc.push("...");
@@ -352,7 +419,7 @@ const getEntryId = (entry, index) =>
                       >
                         {p}
                       </button>
-                    )
+                    ),
                   )}
 
                 <button
